@@ -48,7 +48,6 @@ model Day {
 
 model DayHabit {
     id           String    @id @default(uuid())
-    completed_at DateTime?
 
     day    Day    @relation(fields: [day_id], references: [id])
     day_id String

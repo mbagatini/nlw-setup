@@ -16,6 +16,49 @@ habitsRoutes.get('/', async (request, response) => {
 	response.json(habits);
 });
 
+habitsRoutes.get('/day', async (request, response, next) => {
+	const getDayParams = z.object({
+		date: z.coerce.date()
+	});
+
+	try {
+		const { date } = getDayParams.parse(request.query);
+		const localeDate = dayjs(date).startOf('day');
+		const weekday = dayjs(localeDate).day();
+
+		// Habits of the weekday
+		const habits = await prisma.habit.findMany({
+			where: {
+				created_at: {
+					lte: date
+				},
+				weekdays: {
+					some: { weekday }
+				}
+			}
+		});
+
+		// Completed habits
+		const day = await prisma.day.findFirst({
+			where: {
+				date: localeDate.toDate()
+			},
+			include: {
+				dayHabits: {}
+			}
+		});
+
+		const completedHabits = day?.dayHabits?.map(dayHabit => dayHabit.habit_id);
+
+		response.json({
+			target: habits,
+			completed: completedHabits
+		});
+	} catch (error) {
+		next(error);
+	}
+});
+
 habitsRoutes.post('/', async (request, response, next) => {
 	const habitBody = z.object({
 		title: z.string(),
@@ -38,8 +81,8 @@ habitsRoutes.post('/', async (request, response, next) => {
 			}
 		});
 
-		return response.status(201).send();
+		response.status(201).send();
 	} catch (error) {
-		return next(error);
+		next(error);
 	}
 });

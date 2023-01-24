@@ -2,7 +2,7 @@ import { Plus } from 'phosphor-react';
 import * as Dialog from '@radix-ui/react-dialog';
 
 import logoImg from '../assets/logo.svg';
-import { NewHabitDialog } from './NewHabitDialog';
+import { NewHabitForm } from './NewHabitForm';
 
 export function Header() {
 	return (
@@ -20,7 +20,7 @@ export function Header() {
 				<Dialog.Portal>
 					<Dialog.Overlay className='w-screen h-screen bg-black/80 fixed inset-0' />
 					<Dialog.Content className="absolute bg-zinc-900 p-10 rounded-2xl w-full max-w-md top-1/2 left-1/2 -translate-x-1/2">
-						<NewHabitDialog />
+						<NewHabitForm />
 					</Dialog.Content>
 				</Dialog.Portal>
 			</Dialog.Root>

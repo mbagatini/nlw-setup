@@ -147,4 +147,25 @@ habitsRoutes.patch('/:id/toggle', async (req, res, next) => {
 	} catch (error) {
 		next(error);
 	}
+});
+
+habitsRoutes.get('/summary', async (req, res) => {
+	const summary = await prisma.$queryRaw`
+		select d.id, d.date, 
+			(
+				select cast(count(*) as float)
+				from habit_weekday hw
+				join habit h on h.id = hw.habit_id
+				where hw.weekday = cast(strftime('%w', d.date/1000, 'unixepoch') as int)
+				 and h.created_at <= d.date
+			) as amount,
+			(
+				select cast(count(*) as float)
+				from day_habit dh
+				where dh.day_id = d.id 
+			) as completed
+		from day d
+	`;
+
+	res.json(summary);
 })

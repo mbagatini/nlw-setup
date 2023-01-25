@@ -44,9 +44,9 @@ export function HabitDay({ data }: HabitDayProps) {
 					</Progress.Root>
 
 					<div className='flex flex-col gap-3'>
-						<Checkbox title="minha atividade" className={checkboxClass} />
-						<Checkbox title="minha atividade" className={checkboxClass} />
-						<Checkbox title="minha atividade" className={checkboxClass} />
+						<Checkbox title="minha atividade" titleStyle={checkboxClass} />
+						<Checkbox title="minha atividade" titleStyle={checkboxClass} />
+						<Checkbox title="minha atividade" titleStyle={checkboxClass} />
 					</div>
 
 					<Popover.Arrow height={8} width={16} className="fill-zinc-900" />

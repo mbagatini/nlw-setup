@@ -1,10 +1,10 @@
 import * as Popover from '@radix-ui/react-popover';
-import * as Progress from '@radix-ui/react-progress';
 import clsx from 'clsx';
 import { useState } from 'react';
 
 import dayjs from 'dayjs';
 import { HabitsList } from './HabitsList';
+import { Progressbar } from './Progressbar';
 
 type SummaryHabits = {
 	date: Date;
@@ -44,12 +44,7 @@ export function HabitDay({ data: day }: HabitDayProps) {
 					<span className='text-zinc-400 font-semibold'>{weekdayDescription}</span>
 					<span className='font-extrabold text-3xl leading-tight mt-2 mb-4'>{formattedDate}</span>
 
-					<Progress.Root className="h-3 bg-zinc-700 rounded-xl mb-6">
-						<Progress.Indicator className="h-3 w-3/4 bg-violet-600 rounded-xl"
-							aria-label='Progresso dos hábitos completados no dia'
-							style={{ width: `${completedPercentage}%` }}
-						/>
-					</Progress.Root>
+					<Progressbar percentage={completedPercentage} />
 
 					<HabitsList date={day.date} handleCompletedChange={handleCompletedChange} />
 

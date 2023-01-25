@@ -37,6 +37,26 @@ export function HabitDay({ data: day }: HabitDayProps) {
 	const formattedDate = dayjs(day.date).format('DD/MM');
 	const weekdayDescription = dayjs(day.date).format('dddd');
 
+	const today = dayjs().startOf('day');
+	const isPastDate = dayjs(day.date).isBefore(today);
+
+	function handleToggleHabit(checked: boolean, habitId: string) {
+		api.patch(`/habits/${habitId}/toggle`).then((response) => {
+			// refreshSummary();
+			let updatedHabits = { ...dayHabits };
+
+			if (checked) {
+				updatedHabits.completed.push(habitId);
+			} else {
+				updatedHabits.completed = dayHabits.completed.filter(id => id !== habitId);
+			}
+
+			setDayHabits(updatedHabits);
+			day.completed = updatedHabits.completed.length;
+			refreshCompletedPercentage();
+		})
+	}
+
 	useEffect(() => {
 		if (modalIsOpen) {
 			api.get('/habits/day', {
@@ -81,7 +101,9 @@ export function HabitDay({ data: day }: HabitDayProps) {
 								return <Checkbox
 									key={habit.id}
 									title={habit.title}
-									checked={!!habitCompleted}
+									defaultChecked={!!habitCompleted}
+									disabled={isPastDate}
+									onCheckedChange={checked => handleToggleHabit(!!checked, habit.id)}
 									titleStyle="font-semibold text-xl leading-tight group-data-[state=checked]:line-through group-data-[state=checked]:text-zinc-400"
 								/>
 							})}

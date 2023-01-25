@@ -143,7 +143,7 @@ habitsRoutes.patch('/:id/toggle', async (req, res, next) => {
 			});
 		}
 
-		res.status(201).send();
+		res.status(200).send();
 	} catch (error) {
 		next(error);
 	}

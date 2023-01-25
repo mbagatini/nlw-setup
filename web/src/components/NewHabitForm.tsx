@@ -2,6 +2,8 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { Check, X } from 'phosphor-react';
 import { useState } from 'react';
 
+import { Checkbox } from './Checkbox';
+
 export function NewHabitForm() {
 	const [title, setTitle] = useState("");
 
@@ -22,10 +24,18 @@ export function NewHabitForm() {
 					/>
 				</fieldset>
 
-				<fieldset className='flex flex-col '>
-					<label className="font-semibold" htmlFor="name">
+				<fieldset className='flex flex-col gap-2'>
+					<label className="font-semibold mb-3">
 						Qual a recorrência?
 					</label>
+
+					<Checkbox title="Segunda-feira" />
+					<Checkbox title="Terça-feira" />
+					<Checkbox title="Quarta-feira" />
+					<Checkbox title="Quinta-feira" />
+					<Checkbox title="Sexta-feira" />
+					<Checkbox title="Sábado" />
+					<Checkbox title="Domingo" />
 				</fieldset>
 
 				<Dialog.Close asChild>

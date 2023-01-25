@@ -3,6 +3,8 @@ import * as Progress from '@radix-ui/react-progress';
 import clsx from 'clsx';
 import { useState } from 'react';
 
+import { Checkbox } from './Checkbox';
+
 interface HabitProps {
 	amount: number;
 	completed: number;
@@ -15,6 +17,8 @@ interface HabitDayProps {
 export function HabitDay({ data }: HabitDayProps) {
 	const completedPercentage = Math.round((data.completed / data.amount) * 100);
 	const [progress, setProgress] = useState(completedPercentage);
+
+	const checkboxClass = "font-semibold text-xl leading-tight group-data-[state=checked]:line-through group-data-[state=checked]:text-zinc-400";
 
 	return (
 		<Popover.Root>
@@ -39,10 +43,11 @@ export function HabitDay({ data }: HabitDayProps) {
 						/>
 					</Progress.Root>
 
-					<p>oi</p>
-					<p>oi</p>
-					<p>oi</p>
-					<p>oi</p>
+					<div className='flex flex-col gap-3'>
+						<Checkbox title="minha atividade" className={checkboxClass} />
+						<Checkbox title="minha atividade" className={checkboxClass} />
+						<Checkbox title="minha atividade" className={checkboxClass} />
+					</div>
 
 					<Popover.Arrow height={8} width={16} className="fill-zinc-900" />
 				</Popover.Content>

@@ -19,7 +19,7 @@ export function Header() {
 
 				<Dialog.Portal>
 					<Dialog.Overlay className='w-screen h-screen bg-black/80 fixed inset-0' />
-					<Dialog.Content className="absolute bg-zinc-900 p-10 rounded-2xl w-full max-w-md top-1/2 left-1/2 -translate-x-1/2">
+					<Dialog.Content className="absolute bg-zinc-900 p-10 rounded-2xl w-full max-w-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
 						<NewHabitForm />
 					</Dialog.Content>
 				</Dialog.Portal>

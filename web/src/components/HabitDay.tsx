@@ -1,27 +1,15 @@
 import * as Popover from '@radix-ui/react-popover';
 import * as Progress from '@radix-ui/react-progress';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { Checkbox } from './Checkbox';
-import { api } from '../lib/api';
 import dayjs from 'dayjs';
+import { HabitsList } from './HabitsList';
 
 type SummaryHabits = {
 	date: Date;
 	amount: number;
-	completed: number;
-}
-
-type Habit = {
-	id: string;
-	title: string;
-	created_at: string;
-}
-
-type DayHabits = {
-	target: Habit[]
-	completed: string[]
+	defaultCompleted: number;
 }
 
 interface HabitDayProps {
@@ -29,49 +17,19 @@ interface HabitDayProps {
 }
 
 export function HabitDay({ data: day }: HabitDayProps) {
-	const [modalIsOpen, setModalIsOpen] = useState(false);
-	const [dayHabits, setDayHabits] = useState<DayHabits>({} as DayHabits);
-
-	const completedPercentage = day.amount == 0 ? 0 : Math.round((day.completed / day.amount) * 100);
+	const [habitsCompletedAmount, setHabitsCompletedAmount] = useState(day.defaultCompleted);
 
 	const formattedDate = dayjs(day.date).format('DD/MM');
 	const weekdayDescription = dayjs(day.date).format('dddd');
 
-	const today = dayjs().startOf('day');
-	const isPastDate = dayjs(day.date).isBefore(today);
+	const completedPercentage = day.amount == 0 ? 0 : Math.round((habitsCompletedAmount / day.amount) * 100);
 
-	function handleToggleHabit(checked: boolean, habitId: string) {
-		api.patch(`/habits/${habitId}/toggle`).then((response) => {
-			// refreshSummary();
-			let updatedHabits = { ...dayHabits };
-
-			if (checked) {
-				updatedHabits.completed.push(habitId);
-			} else {
-				updatedHabits.completed = dayHabits.completed.filter(id => id !== habitId);
-			}
-
-			setDayHabits(updatedHabits);
-			day.completed = updatedHabits.completed.length;
-			refreshCompletedPercentage();
-		})
+	function handleCompletedChange(completed: number) {
+		setHabitsCompletedAmount(completed);
 	}
 
-	useEffect(() => {
-		if (modalIsOpen) {
-			api.get('/habits/day', {
-				params: {
-					date: day.date.toISOString()
-				}
-			}).then(response => {
-				setDayHabits(response.data);
-			})
-		}
-
-	}, [modalIsOpen])
-
 	return (
-		<Popover.Root onOpenChange={status => setModalIsOpen(status)}>
+		<Popover.Root>
 			<Popover.Trigger
 				className={clsx("w-10 h-10 bg-zinc-900 border-2 border-zinc-800 rounded-lg", {
 					'bg-violet-900 border-violet-700': completedPercentage >= 1 && completedPercentage < 20,
@@ -93,22 +51,7 @@ export function HabitDay({ data: day }: HabitDayProps) {
 						/>
 					</Progress.Root>
 
-					{dayHabits.target && (
-						<div className='flex flex-col gap-3'>
-							{dayHabits.target.map(habit => {
-								const habitCompleted = dayHabits.completed && dayHabits.completed.includes(habit.id);
-
-								return <Checkbox
-									key={habit.id}
-									title={habit.title}
-									defaultChecked={!!habitCompleted}
-									disabled={isPastDate}
-									onCheckedChange={checked => handleToggleHabit(!!checked, habit.id)}
-									titleStyle="font-semibold text-xl leading-tight group-data-[state=checked]:line-through group-data-[state=checked]:text-zinc-400"
-								/>
-							})}
-						</div>
-					)}
+					<HabitsList date={day.date} handleCompletedChange={handleCompletedChange} />
 
 					<Popover.Arrow height={8} width={16} className="fill-zinc-900" />
 				</Popover.Content>

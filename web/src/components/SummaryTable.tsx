@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { api } from "../lib/api";
 import { generateDatesFromYearBeginning } from "../utils/date-functions";
 import { HabitDay } from "./HabitDay";
 
@@ -16,11 +18,15 @@ type SummaryHabits = {
 	completed: number
 }
 
-interface SummaryTableProps {
-	data: SummaryHabits[]
-}
+export function SummaryTable() {
+	const [summary, setSummary] = useState<SummaryHabits[]>([]);
 
-export function SummaryTable({ data }: SummaryTableProps) {
+	useEffect(() => {
+		api.get('/habits/summary').then(response => {
+			setSummary(response.data);
+		});
+	}, []);
+
 	return (
 		<div className="w-full flex gap-4">
 			<div className="grid grid-rows-7 gap-3">
@@ -34,8 +40,8 @@ export function SummaryTable({ data }: SummaryTableProps) {
 			</div>
 
 			<div className="grid grid-rows-7 grid-flow-col gap-3">
-				{dates.map(date => {
-					const dayInSummary = data.find(day => {
+				{summary.length && dates.map(date => {
+					const dayInSummary = summary.find(day => {
 						return dayjs(date).isSame(day.date, 'day');
 					})
 
@@ -44,7 +50,7 @@ export function SummaryTable({ data }: SummaryTableProps) {
 						data={{
 							date: date,
 							amount: dayInSummary?.amount ?? 0,
-							completed: dayInSummary?.completed ?? 0
+							defaultCompleted: dayInSummary?.completed ?? 0
 						}}
 					/>
 				})}

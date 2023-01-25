@@ -8,7 +8,7 @@ import { api } from '../lib/api';
 import dayjs from 'dayjs';
 
 type SummaryHabits = {
-	date: string;
+	date: Date;
 	amount: number;
 	completed: number;
 }
@@ -41,7 +41,7 @@ export function HabitDay({ data: day }: HabitDayProps) {
 		if (modalIsOpen) {
 			api.get('/habits/day', {
 				params: {
-					date: day.date
+					date: day.date.toISOString()
 				}
 			}).then(response => {
 				setDayHabits(response.data);
@@ -76,7 +76,7 @@ export function HabitDay({ data: day }: HabitDayProps) {
 					{dayHabits.target && (
 						<div className='flex flex-col gap-3'>
 							{dayHabits.target.map(habit => {
-								const habitCompleted = dayHabits.completed && dayHabits.completed.find(id => id === habit.id);
+								const habitCompleted = dayHabits.completed && dayHabits.completed.includes(habit.id);
 
 								return <Checkbox
 									key={habit.id}

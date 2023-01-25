@@ -42,7 +42,7 @@ export function SummaryTable({ data }: SummaryTableProps) {
 					return <HabitDay
 						key={date.toString()}
 						data={{
-							date: date.toString(),
+							date: date,
 							amount: dayInSummary?.amount ?? 0,
 							completed: dayInSummary?.completed ?? 0
 						}}

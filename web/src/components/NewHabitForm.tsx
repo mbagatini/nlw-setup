@@ -3,6 +3,7 @@ import { Check, X } from 'phosphor-react';
 import { FormEvent, useState } from 'react';
 
 import { Checkbox } from './Checkbox';
+import { api } from '../lib/api';
 
 export function NewHabitForm() {
 	const [title, setTitle] = useState("");
@@ -19,6 +20,20 @@ export function NewHabitForm() {
 
 	function handleHabitSubmition(e: FormEvent) {
 		e.preventDefault();
+
+		if (!title || weekdays.length === 0) {
+			alert('Verifique o preenchimento dos campos');
+			return false;
+		}
+
+		api.post('/habits', {
+			title,
+			weekdays: weekdays.map(w => Number(w))
+		}).then(response => {
+			alert('Novo hábito criado!')
+		}).catch(error => {
+			alert('Desculpe, não foi possivel criar o hábito')
+		})
 	}
 
 	return (

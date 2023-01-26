@@ -45,7 +45,7 @@ export function NewHabitForm() {
 					<label className="font-semibold" htmlFor="title">
 						Qual seu comprometimento?
 					</label>
-					<input className="p-4 bg-zinc-800 rounded-lg placeholder:text-zinc-400"
+					<input className="p-4 bg-zinc-800 rounded-lg placeholder:text-zinc-400  focus:outline-none focus:ring-2 focus:ring-violet-700 focus:ring-offset-2 focus:ring-offset-zinc-900"
 						id="title"
 						placeholder="Acordar antes das 07:00"
 						value={title}
@@ -67,13 +67,13 @@ export function NewHabitForm() {
 					<Checkbox title="Domingo" onCheckedChange={isChecked => handleWeekdaysChange(isChecked === true, "0")} />
 				</fieldset>
 
-				<button type='submit' className="w-full p-4 mt-6 rounded-lg flex items-center justify-center gap-3 bg-green-600 hover:bg-green-500 font-semibold ">
+				<button type='submit' className="w-full p-4 mt-6 rounded-lg flex items-center justify-center gap-3 bg-green-600 hover:bg-green-500 font-semibold transition-colors">
 					<Check size={24} />
 					Confirmar
 				</button>
 			</form>
 
-			<Dialog.Close className='absolute top-6 right-6 text-zinc-400 hover:text-zinc-200'>
+			<Dialog.Close className='absolute top-6 right-6 rounded-lg text-zinc-400 hover:text-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-700 focus:ring-offset-2 focus:ring-offset-zinc-900'>
 				<X size={24} aria-label="Close" />
 			</Dialog.Close>
 		</>

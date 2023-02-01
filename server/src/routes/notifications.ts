@@ -43,3 +43,36 @@ notificationsRoutes.post('/register', (request, response) => {
 
 	response.status(201).send();
 })
+
+notificationsRoutes.post('/send', (request, response, next) => {
+	const getSubscriptionBody = z.object({
+		subscription: z.object({
+			endpoint: z.string(),
+			keys: z.object({
+				p256dh: z.string(),
+				auth: z.string(),
+			})
+		})
+	});
+
+	try {
+		const { subscription } = getSubscriptionBody.parse(request.body);
+
+		setTimeout(async () => {
+			WebPush.sendNotification(subscription, 'My beatiful message ihuuu')
+				.then(() => {
+					response.status(201).send();
+				})
+				.catch(error => {
+					console.error
+					if (error.statusCode === 406) {
+						response.status(500).send('Excessive notifications sent. Please try again in some minutes.');
+					} else {
+						response.status(500).send('Problem sending notifications.')
+					}
+				})
+		}, 1500);
+	} catch (error) {
+		next(error);
+	}
+})

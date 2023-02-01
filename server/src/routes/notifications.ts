@@ -26,3 +26,20 @@ WebPush.setVapidDetails(
 notificationsRoutes.get('/public_key', (request, response) => {
 	response.json({ public_key: vapidKeys.publicKey });
 });
+
+notificationsRoutes.post('/register', (request, response) => {
+	// console.log(request.body);
+
+	// next: save the subscription to the user
+	// const getSubscriptionBody = z.object({
+	// 	subscription: z.object({
+	// 		endpoint: z.string(),
+	// 		keys: z.object({
+	// 			p256dh: z.string(),
+	// 			auth: z.string(),
+	// 		})
+	// 	})
+	// });
+
+	response.status(201).send();
+})

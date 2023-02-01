@@ -3,6 +3,7 @@ import cors from 'cors';
 import { ZodError } from 'zod';
 
 import { habitsRoutes } from './routes/habits';
+import { notificationsRoutes } from './routes/notifications';
 
 const app = express();
 
@@ -21,6 +22,7 @@ const handleErrors = (err: Error, req: Request, res: Response, next: NextFunctio
 
 // Routes
 app.use('/habits', habitsRoutes);
+app.use('/push', notificationsRoutes);
 
 // Middlewares
 app.use(handleErrors);
